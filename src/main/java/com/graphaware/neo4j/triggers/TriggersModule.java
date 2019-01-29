@@ -21,15 +21,13 @@ public class TriggersModule extends BaseTxDrivenModule<Void> implements TimerDri
 
     private final TriggersConfiguration configuration;
     private final GraphDatabaseService database;
-    private final TriggersExecutor triggersExecutor;
+    private TriggersExecutor triggersExecutor;
 
     public TriggersModule(String moduleId, GraphDatabaseService graphDatabaseService, TriggersConfiguration configuration) {
         super(moduleId);
         this.configuration = configuration;
         this.database = graphDatabaseService;
-        Config config = ((GraphDatabaseAPI) database).getDependencyResolver().resolveDependency(Config.class);
-        TriggersDefinition triggersDefinition = DefinitionFileReader.loadTriggersDefinition(configuration.getFile(), config.getRaw());
-        triggersExecutor = new TriggersExecutor(database, TriggersRegistry.fromDefinition(triggersDefinition));
+        triggersExecutor = loadTriggers();
     }
 
     @Override
@@ -39,6 +37,10 @@ public class TriggersModule extends BaseTxDrivenModule<Void> implements TimerDri
         triggersExecutor.handleDeletedNodes(transactionData.getAllDeletedNodes());
 
         return null;
+    }
+
+    public void reloadTriggers() {
+        triggersExecutor = loadTriggers();
     }
 
     @Override
@@ -57,6 +59,13 @@ public class TriggersModule extends BaseTxDrivenModule<Void> implements TimerDri
     @Override
     public BaseTxAndTimerDrivenModuleConfiguration getConfiguration() {
         return configuration;
+    }
+
+    private TriggersExecutor loadTriggers() {
+        Config config = ((GraphDatabaseAPI) database).getDependencyResolver().resolveDependency(Config.class);
+        TriggersDefinition triggersDefinition = DefinitionFileReader.loadTriggersDefinition(configuration.getFile(), config.getRaw());
+
+        return new TriggersExecutor(database, TriggersRegistry.fromDefinition(triggersDefinition));
     }
 
 }

@@ -74,6 +74,14 @@ The different events currently supported are
 
 The Expressions for the condition follow the conditions available in the [GraphAware Common Inclusion Policies](https://github.com/graphaware/neo4j-framework/tree/master/common#inclusion-policies
 
+### Reloading the definition
+
+While the database is running, you can change your JSON file and reload the definiton with the following procedure :
+
+```
+CALL ga.triggers.reload()
+```
+
 License
 -------
 
