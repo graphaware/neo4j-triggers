@@ -1,0 +1,12 @@
+{
+  "nodes_created": [
+    {
+      "condition": "hasLabel('Node')",
+      "statement": "MATCH (n) WHERE id(n) = $id CREATE (other:Node) MERGE (other)-[:CONNECTS_TO]->(n)"
+    },
+    {
+      "condition": "hasLabel('Node')",
+      "statement": "MATCH (n) WHERE id(n) = $id CREATE (p:Person) MERGE (p)-[:KNOWS]->(n)"
+    }
+  ]
+}

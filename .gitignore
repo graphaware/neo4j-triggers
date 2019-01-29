@@ -1,0 +1,15 @@
+.buildpath
+.project
+.settings
+target/
+.idea/
+*.class
+*.iml
+*.iws
+*.ipr
+*.db
+.DS_Store
+.classpath
+neo4j-home/
+data/
+metrics/
