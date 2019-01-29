@@ -1,9 +1,9 @@
 package com.graphaware.neo4j.triggers;
 
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.procedure.Context;
 import org.neo4j.procedure.Procedure;
 
-import javax.ws.rs.core.Context;
 import java.util.stream.Stream;
 
 import static com.graphaware.runtime.RuntimeRegistry.getStartedRuntime;
@@ -29,7 +29,7 @@ public class TriggersProcedure {
     }
 
     public class Result {
-        private String message;
+        public String message;
 
         public Result(String message) {
             this.message = message;

@@ -36,7 +36,7 @@ And add this configuration to register the Triggers module:
 com.graphaware.runtime.enabled=true
 
 # TR becomes the module ID (you will need to use this ID in other config below):
-com.graphaware.module.TR.1=com.graphaware.neo4j.expire.TriggersModuleBootstrapper
+com.graphaware.module.TR.1=com.graphaware.neo4j.triggers.TriggersModuleBootstrapper
 # Where the trigger file is located, full path or path relative to the /conf directory of Neo4j
 com.graphaware.module.TR.file=triggers.json
 ```
