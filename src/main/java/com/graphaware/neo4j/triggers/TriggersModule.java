@@ -1,5 +1,6 @@
 package com.graphaware.neo4j.triggers;
 
+import com.graphaware.common.util.Change;
 import com.graphaware.neo4j.triggers.config.TriggersConfiguration;
 import com.graphaware.neo4j.triggers.definition.DefinitionFileReader;
 import com.graphaware.neo4j.triggers.definition.TriggersDefinition;
@@ -32,10 +33,11 @@ public class TriggersModule extends BaseTxDrivenModule<Void> implements TimerDri
 
     @Override
     public Void beforeCommit(ImprovedTransactionData transactionData) throws DeliberateTransactionRollbackException {
-        triggersExecutor.handleCreatedNodes(transactionData.getAllCreatedNodes());
-        triggersExecutor.handleUpdatedNodes(transactionData.getAllChangedNodes().stream().map(c -> {return c.getCurrent();}).collect(Collectors.toList()));
-        triggersExecutor.handleDeletedNodes(transactionData.getAllDeletedNodes());
-
+        if (null != triggersExecutor && configuration.getState().equals(TriggersConfiguration.ModuleState.ACTIVE)) {
+            triggersExecutor.handleCreatedNodes(transactionData.getAllCreatedNodes());
+            triggersExecutor.handleUpdatedNodes(transactionData.getAllChangedNodes().stream().map(Change::getCurrent).collect(Collectors.toList()));
+            triggersExecutor.handleDeletedNodes(transactionData.getAllDeletedNodes());
+        }
         return null;
     }
 
@@ -62,6 +64,9 @@ public class TriggersModule extends BaseTxDrivenModule<Void> implements TimerDri
     }
 
     private TriggersExecutor loadTriggers() {
+        if (configuration.getState().equals(TriggersConfiguration.ModuleState.DISABLED)) {
+            return null;
+        }
         Config config = ((GraphDatabaseAPI) database).getDependencyResolver().resolveDependency(Config.class);
         TriggersDefinition triggersDefinition = DefinitionFileReader.loadTriggersDefinition(configuration.getFile(), config.getRaw());
 
