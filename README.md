@@ -6,24 +6,18 @@ EXPERIMENTAL MODULE
 
 GraphAware Triggers is a simple library that automatically executes defined Cypher statements during Transaction Events.
 
-Getting the Software
---------------------
+## Setup
 
-### Server Mode
+Download the following two `.jar` files and install them in the `plugins` directory of your Neo4j installation
 
-When using Neo4j in the <a href="http://docs.neo4j.org/chunked/stable/server-installation.html" target="_blank">standalone server</a> mode,
-you will need the <a href="https://github.com/graphaware/neo4j-framework" target="_blank">GraphAware Neo4j Framework</a> and GraphAware Neo4j Expire .jar files (both of which you can <a href="http://products.graphaware.com/" target="_blank">download here</a>) dropped
-into the `plugins` directory of your Neo4j installation. After changing a few lines of config (read on) and restarting Neo4j, the module will do its magic.
+* [GraphAware Framework](https://products.graphaware.com/?dir=framework-server-community)
+* [Triggers Module](https://products.graphaware.com/?dir=triggers)
 
-Setup and Configuration
---------------------
+Make sure to download the versions that are compatible with your Neo4j installation, for example the Triggers Module in
+version 3.5.1.53.1 is compatible with Neo4j 3.5.1 and the framework 3.5.1.53, the last bit specifies the version of the module
+itself.
 
-### Server Mode
-
-First, please make sure that the framework is configured by adding `dbms.thirdparty_jaxrs_classes=com.graphaware.server=/graphaware` to `conf/neo4j.conf`,
-as described <a href="https://github.com/graphaware/neo4j-framework#server-mode" target="_blank">here</a>.
-
-And add this configuration to register the Triggers module:
+Next, add the following configuration in your `neo4j.conf` file to register the Triggers module:
 
 ```
 com.graphaware.runtime.enabled=true
@@ -32,6 +26,8 @@ com.graphaware.runtime.enabled=true
 com.graphaware.module.TR.1=com.graphaware.neo4j.triggers.TriggersModuleBootstrapper
 # Where the trigger file is located, full path or path relative to the /conf directory of Neo4j
 com.graphaware.module.TR.file=triggers.json
+
+dbms.security.procedures.whitelist=ga.triggers.*
 ```
 
 Using GraphAware Triggers
