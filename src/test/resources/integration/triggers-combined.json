@@ -1,0 +1,24 @@
+{
+  "nodes_created": [
+    {
+      "condition": "hasLabel('Document')",
+      "statement": "MATCH (n) WHERE id(n) = $id SET n.createdAt = timestamp()"
+    },
+    {
+      "condition": "hasLabel('NE_Company')",
+      "statement": "MATCH (n) WHERE id(n) = $id MERGE (e:Entity:Company {value: n.value}) MERGE (n)-[:REFERS_TO]->(e)"
+    }
+  ],
+  "relationships_created": [
+    {
+      "condition": "isType('FATHER_OF')",
+      "statement": "MATCH (from)-[r]->(to) WHERE id(r) = $id MERGE (to)-[:CHILD_OF]->(from)"
+    }
+  ],
+  "relationships_updated": [
+    {
+      "condition": "isType('SIMILAR_TO') && hasProperty('relevance')",
+      "statement": "MATCH (from)-[r]->(to) WHERE id(r) = $id MATCH (to)<-[sim:SIMILAR_TO]-(conn) WITH to, sum(r.relevance) AS total SET to.totalInfluence = total"
+    }
+  ]
+}

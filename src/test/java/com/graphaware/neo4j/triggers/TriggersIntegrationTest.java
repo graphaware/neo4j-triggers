@@ -49,6 +49,43 @@ public class TriggersIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    public void testRelationshipCreateTrigger() {
+        clearDb();
+        initModuleWithConfig("integration/triggers-rels.json");
+        try (Transaction tx = database.beginTx()) {
+            database.execute("CREATE (p:Person {name:'Alessandro'})-[:FATHER_OF]->(:Person {name: 'Flavia'})");
+            tx.success();
+        }
+
+        try (Transaction tx = database.beginTx()) {
+            Result result2 = database.execute("MATCH p=(:Person {name:'Flavia'})-[:CHILD_OF]->(:Person {name:'Alessandro'}) RETURN p");
+            assertTrue(result2.hasNext());
+            tx.success();
+        }
+    }
+
+    @Test
+    public void testRelationshipUpdateTrigger() {
+        clearDb();
+        initModuleWithConfig("integration/triggers-rels.json");
+        try (Transaction tx = database.beginTx()) {
+            database.execute("CREATE (b:Book)-[:SIMILAR_TO {relevance: 0.2}]->(to:Book {name: 'Graph-Based Machine Learning'})");
+            tx.success();
+        }
+
+        try (Transaction tx = database.beginTx()) {
+            database.execute("MATCH (b:Book)-[r:SIMILAR_TO {relevance: 0.2}]->(to:Book {name: 'Graph-Based Machine Learning'}) SET r.relevance = 0.8");
+            tx.success();
+        }
+
+        try (Transaction tx = database.beginTx()) {
+            Result result2 = database.execute("MATCH p=(b:Book)-[r:SIMILAR_TO]->(to:Book {name: 'Graph-Based Machine Learning', totalInfluence:0.8 }) RETURN p");
+            assertTrue(result2.hasNext());
+            tx.success();
+        }
+    }
+
+    @Test
     public void reloadTest() {
         clearDb();
         initModuleWithConfig("integration/triggers-multi.json");

@@ -15,13 +15,6 @@ When using Neo4j in the <a href="http://docs.neo4j.org/chunked/stable/server-ins
 you will need the <a href="https://github.com/graphaware/neo4j-framework" target="_blank">GraphAware Neo4j Framework</a> and GraphAware Neo4j Expire .jar files (both of which you can <a href="http://products.graphaware.com/" target="_blank">download here</a>) dropped
 into the `plugins` directory of your Neo4j installation. After changing a few lines of config (read on) and restarting Neo4j, the module will do its magic.
 
-
-#### Note on Versioning Scheme
-
-The version number has two parts. The first four numbers indicate compatibility with Neo4j GraphAware Framework.
- The last number is the version of the Expire library. For example, version 2.3.3.37.1 is version 1 of the Expire library
- compatible with GraphAware Neo4j Framework 2.3.3.37.
-
 Setup and Configuration
 --------------------
 
@@ -50,12 +43,24 @@ The triggers are defined in a simple JSON file, for example :
 {
   "nodes_created": [
     {
-      "condition": "hasLabel('Node')",
-      "statement": "MATCH (n) WHERE id(n) = $id CREATE (other:Node) MERGE (other)-[:CONNECTS_TO]->(n)"
+      "condition": "hasLabel('Document')",
+      "statement": "MATCH (n) WHERE id(n) = $id SET n.createdAt = timestamp()"
     },
     {
-      "condition": "hasLabel('Node')",
-      "statement": "MATCH (n) WHERE id(n) = $id CREATE (p:Person) MERGE (p)-[:KNOWS]->(n)"
+      "condition": "hasLabel('NE_Company')",
+      "statement": "MATCH (n) WHERE id(n) = $id MERGE (e:Entity:Company {value: n.value}) MERGE (n)-[:REFERS_TO]->(e)"
+    }
+  ],
+  "relationships_created": [
+    {
+      "condition": "isType('FATHER_OF')",
+      "statement": "MATCH (from)-[r]->(to) WHERE id(r) = $id MERGE (to)-[:CHILD_OF]->(from)"
+    }
+  ],
+  "relationships_updated": [
+    {
+      "condition": "isType('SIMILAR_TO') && hasProperty('relevance')",
+      "statement": "MATCH (from)-[r]->(to) WHERE id(r) = $id MATCH (to)<-[sim:SIMILAR_TO]-(conn) WITH to, sum(r.relevance) AS total SET to.totalInfluence = total"
     }
   ]
 }
@@ -71,6 +76,9 @@ The different events currently supported are
 * `nodes_created`
 * `nodes_updated`
 * `nodes_deleted`
+* `relationships_created`
+* `relationships_updated`
+* `relationships_deleted`
 
 The Expressions for the condition follow the conditions available in the [GraphAware Common Inclusion Policies](https://github.com/graphaware/neo4j-framework/tree/master/common#inclusion-policies
 
@@ -81,6 +89,12 @@ While the database is running, you can change your JSON file and reload the defi
 ```
 CALL ga.triggers.reload()
 ```
+
+#### Note on Versioning Scheme
+
+The version number has two parts. The first four numbers indicate compatibility with Neo4j GraphAware Framework.
+ The last number is the version of the Triggers library. For example, version 3.5.1.53.1 is version 1 of the Triggers library
+ compatible with GraphAware Neo4j Framework 3.5.1.53.
 
 License
 -------

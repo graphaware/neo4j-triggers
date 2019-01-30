@@ -34,9 +34,7 @@ public class TriggersModule extends BaseTxDrivenModule<Void> implements TimerDri
     @Override
     public Void beforeCommit(ImprovedTransactionData transactionData) throws DeliberateTransactionRollbackException {
         if (null != triggersExecutor && configuration.getState().equals(TriggersConfiguration.ModuleState.ACTIVE)) {
-            triggersExecutor.handleCreatedNodes(transactionData.getAllCreatedNodes());
-            triggersExecutor.handleUpdatedNodes(transactionData.getAllChangedNodes().stream().map(Change::getCurrent).collect(Collectors.toList()));
-            triggersExecutor.handleDeletedNodes(transactionData.getAllDeletedNodes());
+            triggersExecutor.handleTransaction(transactionData);
         }
         return null;
     }

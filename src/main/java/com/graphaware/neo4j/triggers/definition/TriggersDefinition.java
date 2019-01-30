@@ -18,13 +18,16 @@ public class TriggersDefinition {
     @JsonProperty("nodes_deleted")
     private List<Definition> nodesDeleted = new ArrayList<>();
 
-    public TriggersDefinition() {
-    }
+    @JsonProperty("relationships_created")
+    private List<Definition> relationshipsCreated = new ArrayList<>();
 
-    public TriggersDefinition(List<Definition> nodesCreated, List<Definition> nodesUpdated, List<Definition> nodesDeleted) {
-        this.nodesCreated = nodesCreated;
-        this.nodesUpdated = nodesUpdated;
-        this.nodesDeleted = nodesDeleted;
+    @JsonProperty("relationships_updated")
+    private List<Definition> relationshipsUpdated = new ArrayList<>();
+
+    @JsonProperty("relationships_deleted")
+    private List<Definition> relationshipsDeleted = new ArrayList<>();
+
+    public TriggersDefinition() {
     }
 
     public List<Definition> getNodesCreated() {
@@ -37,5 +40,17 @@ public class TriggersDefinition {
 
     public List<Definition> getNodesDeleted() {
         return nodesDeleted;
+    }
+
+    public List<Definition> getRelationshipsCreated() {
+        return relationshipsCreated;
+    }
+
+    public List<Definition> getRelationshipsUpdated() {
+        return relationshipsUpdated;
+    }
+
+    public List<Definition> getRelationshipsDeleted() {
+        return relationshipsDeleted;
     }
 }

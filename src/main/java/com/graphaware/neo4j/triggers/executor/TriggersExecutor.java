@@ -1,16 +1,19 @@
 package com.graphaware.neo4j.triggers.executor;
 
 import com.graphaware.common.log.LoggerFactory;
+import com.graphaware.common.util.Change;
+import com.graphaware.neo4j.triggers.domain.AbstractTrigger;
 import com.graphaware.neo4j.triggers.domain.NodeTrigger;
+import com.graphaware.neo4j.triggers.domain.RelationshipTrigger;
 import com.graphaware.neo4j.triggers.domain.TriggersRegistry;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Transaction;
+import com.graphaware.tx.event.improved.api.ImprovedTransactionData;
+import org.neo4j.graphdb.*;
 import org.neo4j.logging.Log;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TriggersExecutor {
 
@@ -24,11 +27,20 @@ public class TriggersExecutor {
         this.triggersRegistry = triggersRegistry;
     }
 
+    public void handleTransaction(ImprovedTransactionData transactionData) {
+        handleCreatedNodes(transactionData.getAllCreatedNodes());
+        handleUpdatedNodes(transactionData.getAllChangedNodes().stream().map(Change::getCurrent).collect(Collectors.toList()));
+        handleDeletedNodes(transactionData.getAllDeletedNodes());
+        handleCreatedRelationships(transactionData.getAllCreatedRelationships());
+        handleUpdatedRelationships(transactionData.getAllChangedRelationships().stream().map(Change::getCurrent).collect(Collectors.toList()));
+        handleDeletedRelationships(transactionData.getAllDeletedRelationships());
+    }
+
     public void handleCreatedNodes(Collection<Node> nodes) {
         for (Node node : nodes) {
             for (NodeTrigger trigger : triggersRegistry.getOnNodeCreated()) {
                 if (trigger.satisfies(node)) {
-                    executeTriggerForNode(node, trigger);
+                    executeTrigger(node, trigger);
                 }
             }
         }
@@ -38,7 +50,7 @@ public class TriggersExecutor {
         for (Node node : nodes) {
             for (NodeTrigger trigger : triggersRegistry.getOnNodeUpdated()) {
                 if (trigger.satisfies(node)) {
-                    executeTriggerForNode(node, trigger);
+                    executeTrigger(node, trigger);
                 }
             }
         }
@@ -48,15 +60,45 @@ public class TriggersExecutor {
         for (Node node : nodes) {
             for (NodeTrigger trigger : triggersRegistry.getOnNodeDeleted()) {
                 if (trigger.satisfies(node)) {
-                    executeTriggerForNode(node, trigger);
+                    executeTrigger(node, trigger);
                 }
             }
         }
     }
 
-    private void executeTriggerForNode(Node node, NodeTrigger trigger) {
+    public void handleCreatedRelationships(Collection<Relationship> relationships) {
+        for (Relationship relationship : relationships) {
+            for (RelationshipTrigger trigger : triggersRegistry.getOnRelationshipCreated()) {
+                if (trigger.satisfies(relationship)) {
+                    executeTrigger(relationship, trigger);
+                }
+            }
+        }
+    }
+
+    public void handleUpdatedRelationships(Collection<Relationship> relationships) {
+        for (Relationship relationship : relationships) {
+            for (RelationshipTrigger trigger : triggersRegistry.getOnRelationshipUpdated()) {
+                if (trigger.satisfies(relationship)) {
+                    executeTrigger(relationship, trigger);
+                }
+            }
+        }
+    }
+
+    public void handleDeletedRelationships(Collection<Relationship> relationships) {
+        for (Relationship relationship : relationships) {
+            for (RelationshipTrigger trigger : triggersRegistry.getOnRelationshipDeleted()) {
+                if (trigger.satisfies(relationship)) {
+                    executeTrigger(relationship, trigger);
+                }
+            }
+        }
+    }
+
+    private void executeTrigger(Entity entity, AbstractTrigger trigger) {
         try (Transaction tx = database.beginTx()) {
-            Map<String, Object> parameters = Collections.singletonMap("id", node.getId());
+            Map<String, Object> parameters = Collections.singletonMap("id", entity.getId());
             database.execute(trigger.getStatement(), parameters);
             tx.success();
         } catch (Exception e) {
