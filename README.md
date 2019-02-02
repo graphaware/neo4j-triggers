@@ -125,6 +125,12 @@ You can use the query written in this file in your `triggers.json` definition as
 }
 ```
 
+You will need to specify the directory holding the queries by adding the following line to your Neo4j configuration :
+
+```
+com.graphaware.module.TR.queries=queries/
+```
+
 #### Note on Versioning Scheme
 
 The version number has two parts. The first four numbers indicate compatibility with Neo4j GraphAware Framework.

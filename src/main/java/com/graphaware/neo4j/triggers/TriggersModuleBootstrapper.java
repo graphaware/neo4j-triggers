@@ -29,6 +29,12 @@ public class TriggersModuleBootstrapper extends BaseRuntimeModuleBootstrapper<Tr
             configuration = configuration.withFile(triggersFile);
         }
 
+        if (configExists(config, QUERIES_DIR)) {
+            String queriesDir = config.get(QUERIES_DIR);
+            LOG.info("Queries path set to %s", queriesDir);
+            configuration = configuration.withQueries(queriesDir);
+        }
+
         return new TriggersModule(moduleId, database, configuration);
     }
 }

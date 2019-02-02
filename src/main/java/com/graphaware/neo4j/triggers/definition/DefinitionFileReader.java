@@ -53,10 +53,11 @@ public class DefinitionFileReader {
             } else {
                 file = config.get(NEO4j_HOME) + File.separator + NEO4j_CONF_DIR + File.separator + queriesDirPath;
             }
-            LOG.info("Reading query files from " + file);
+            LOG.info("Reading query files from %s", file);
 
             Files.list(Paths.get(file)).forEach(f -> {
                 try {
+                    LOG.info("Loading Cypher file %s", f.getFileName());
                     if (CYPHER_EXTENSIONS.contains(FilenameUtils.getExtension(f.toString()))) {
                         queries.put(FilenameUtils.getBaseName(f.toString()), new String(Files.readAllBytes(f)));
                     }

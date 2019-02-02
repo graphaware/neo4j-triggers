@@ -88,7 +88,7 @@ public class TriggersIntegrationTest extends IntegrationTest {
     @Test
     public void testLoadQueriesFromFile() {
         clearDb();
-        initModuleWithConfig("integration/triggers-with-query-files.json", "integration/queries");
+        initModuleWithConfig("integration/triggers-with-query-files.json", "integration/queries/");
         try (Transaction tx = database.beginTx()) {
             database.execute("CREATE (n:Node)");
             tx.success();
