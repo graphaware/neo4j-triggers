@@ -27,8 +27,12 @@ public abstract class IntegrationTest {
     }
 
     protected void initModuleWithConfig(String config) {
+        initModuleWithConfig(config, null);
+    }
+
+    protected void initModuleWithConfig(String config, String queriesPath) {
         GraphAwareRuntime runtime = GraphAwareRuntimeFactory.createRuntime(database);
-        runtime.registerModule(new TriggersModule("TR", database, TriggersConfiguration.defaultConfiguration().withFile(config)));
+        runtime.registerModule(new TriggersModule("TR", database, TriggersConfiguration.defaultConfiguration().withFile(config).withQueries(queriesPath)));
         runtime.start();
         runtime.waitUntilStarted();
     }

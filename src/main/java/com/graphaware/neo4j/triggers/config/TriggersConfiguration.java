@@ -11,28 +11,35 @@ public class TriggersConfiguration extends BaseTxAndTimerDrivenModuleConfigurati
 
     private final String file;
 
+    private final String queries;
+
     public enum ModuleState {
         ACTIVE,
         DISABLED
     }
 
     public static TriggersConfiguration defaultConfiguration() {
-        return new TriggersConfiguration(InclusionPolicies.all(), Long.MAX_VALUE, InstanceRole::isWritable, ModuleState.DISABLED, null);
+        return new TriggersConfiguration(InclusionPolicies.all(), Long.MAX_VALUE, InstanceRole::isWritable, ModuleState.DISABLED, null, null);
     }
 
-    public TriggersConfiguration(InclusionPolicies inclusionPolicies, long initializeUntil, InstanceRolePolicy instanceRolePolicy, ModuleState state, String file) {
+    public TriggersConfiguration(InclusionPolicies inclusionPolicies, long initializeUntil, InstanceRolePolicy instanceRolePolicy, ModuleState state, String file, String queries) {
         super(inclusionPolicies, initializeUntil, instanceRolePolicy);
         this.state = state;
         this.file = file;
+        this.queries = queries;
     }
 
     @Override
     protected TriggersConfiguration newInstance(InclusionPolicies inclusionPolicies, long initializeUntil, InstanceRolePolicy instanceRolePolicy) {
-        return new TriggersConfiguration(inclusionPolicies, initializeUntil, instanceRolePolicy, getState(), getFile());
+        return new TriggersConfiguration(inclusionPolicies, initializeUntil, instanceRolePolicy, getState(), getFile(), getQueries());
     }
 
     public TriggersConfiguration withFile(String file) {
-        return new TriggersConfiguration(getInclusionPolicies(), initializeUntil(), getInstanceRolePolicy(), ModuleState.ACTIVE, file);
+        return new TriggersConfiguration(getInclusionPolicies(), initializeUntil(), getInstanceRolePolicy(), ModuleState.ACTIVE, file, getQueries());
+    }
+
+    public TriggersConfiguration withQueries(String queries) {
+        return new TriggersConfiguration(getInclusionPolicies(), initializeUntil(), getInstanceRolePolicy(), ModuleState.ACTIVE, getFile(), queries);
     }
 
     public ModuleState getState() {
@@ -41,6 +48,10 @@ public class TriggersConfiguration extends BaseTxAndTimerDrivenModuleConfigurati
 
     public String getFile() {
         return file;
+    }
+
+    public String getQueries() {
+        return queries;
     }
 
     @Override
@@ -61,6 +72,10 @@ public class TriggersConfiguration extends BaseTxAndTimerDrivenModuleConfigurati
             return false;
         }
 
+        if (queries != null ? !queries.equals(that.queries) : that.queries != null) {
+            return false;
+        }
+
         return true;
     }
 
@@ -69,6 +84,7 @@ public class TriggersConfiguration extends BaseTxAndTimerDrivenModuleConfigurati
         int result = super.hashCode();
         result = 31 * result + (file != null ? file.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (queries != null ? queries.hashCode() : 0);
 
         return result;
     }

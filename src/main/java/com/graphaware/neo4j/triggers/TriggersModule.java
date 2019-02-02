@@ -1,6 +1,5 @@
 package com.graphaware.neo4j.triggers;
 
-import com.graphaware.common.util.Change;
 import com.graphaware.neo4j.triggers.config.TriggersConfiguration;
 import com.graphaware.neo4j.triggers.definition.DefinitionFileReader;
 import com.graphaware.neo4j.triggers.definition.TriggersDefinition;
@@ -16,7 +15,8 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.kernel.configuration.Config;
 import org.neo4j.kernel.internal.GraphDatabaseAPI;
 
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Map;
 
 public class TriggersModule extends BaseTxDrivenModule<Void> implements TimerDrivenModule {
 
@@ -39,7 +39,7 @@ public class TriggersModule extends BaseTxDrivenModule<Void> implements TimerDri
         return null;
     }
 
-    public void reloadTriggers() {
+    public synchronized void reloadTriggers() {
         triggersExecutor = loadTriggers();
     }
 
@@ -61,12 +61,16 @@ public class TriggersModule extends BaseTxDrivenModule<Void> implements TimerDri
         return configuration;
     }
 
-    private TriggersExecutor loadTriggers() {
+    private synchronized TriggersExecutor loadTriggers() {
         if (configuration.getState().equals(TriggersConfiguration.ModuleState.DISABLED)) {
             return null;
         }
         Config config = ((GraphDatabaseAPI) database).getDependencyResolver().resolveDependency(Config.class);
+        Map<String, String> namedQueries = configuration.getQueries() != null
+                ? DefinitionFileReader.loadQueries(configuration.getQueries(), config.getRaw())
+                : Collections.emptyMap();
         TriggersDefinition triggersDefinition = DefinitionFileReader.loadTriggersDefinition(configuration.getFile(), config.getRaw());
+        triggersDefinition.mapQueriesFromFiles(namedQueries);
 
         return new TriggersExecutor(database, TriggersRegistry.fromDefinition(triggersDefinition));
     }

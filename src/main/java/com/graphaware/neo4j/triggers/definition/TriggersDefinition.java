@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TriggersDefinition {
@@ -52,5 +53,25 @@ public class TriggersDefinition {
 
     public List<Definition> getRelationshipsDeleted() {
         return relationshipsDeleted;
+    }
+
+    public void mapQueriesFromFiles(Map<String, String> namedQueries) {
+        map(nodesCreated, namedQueries);
+        map(nodesUpdated, namedQueries);
+        map(nodesDeleted, namedQueries);
+        map(relationshipsCreated, namedQueries);
+        map(relationshipsUpdated, namedQueries);
+        map(relationshipsDeleted, namedQueries);
+    }
+
+    private void map(List<Definition> definitions, Map<String, String> namedQueries) {
+        for (Definition definition : definitions) {
+            if (definition.getStatement() == null ) {
+                if (definition.getNamedQuery() == null || !namedQueries.containsKey(definition.getNamedQuery())) {
+                    throw new RuntimeException("Statement is null or NamedQuery not found");
+                }
+                definition.setStatement(namedQueries.get(definition.getNamedQuery()));
+            }
+        }
     }
 }

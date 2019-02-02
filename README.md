@@ -62,7 +62,7 @@ The triggers are defined in a simple JSON file, for example :
 }
 ```
 
-The definitons file lets you define for which events, with which condition a trigger will occur, and the Cypher statement the trigger will
+The definitions file lets you define for which events, with which condition a trigger will occur, and the Cypher statement the trigger will
 execute.
 
 Automatically, the graph object ID of the transaction element, a `node` or a `relationship`, is given as the `id` parameter to the statement.
@@ -84,6 +84,45 @@ While the database is running, you can change your JSON file and reload the defi
 
 ```
 CALL ga.triggers.reload()
+```
+
+### Using query files
+
+Writing a long cypher query on a single line for complying with the JSON specification can be cumbersome. That's why we allow
+users to write their queries in distinct `.cypher` or `.cyp` files and reference them in the definition.
+
+For example, with the following file structure of neo4j :
+
+```
+$NEO4J_HOME
+    - bin /
+    - certificates /
+    - conf /
+        ...
+        - neo4j.conf
+        - triggers.json
+        - queries /
+            - add-type-as-label.cypher
+```
+
+And the content of `add-type-as-label.cypher` being :
+
+```
+CALL apoc.create.addLabels(id(n), [n.type])
+YIELD node RETURN node
+```
+
+You can use the query written in this file in your `triggers.json` definition as follows :
+
+```
+{
+  "nodes_created": [
+    {
+      "condition": "hasLabel('Node')",
+      "namedQuery": "add-type-as-label"
+    }
+  ]
+}
 ```
 
 #### Note on Versioning Scheme

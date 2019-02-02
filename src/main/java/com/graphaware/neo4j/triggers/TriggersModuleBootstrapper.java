@@ -14,6 +14,7 @@ public class TriggersModuleBootstrapper extends BaseRuntimeModuleBootstrapper<Tr
     private static final Log LOG = LoggerFactory.getLogger(TriggersModuleBootstrapper.class);
 
     private static final String FILE = "file";
+    private static final String QUERIES_DIR = "queries";
 
     @Override
     protected TriggersConfiguration defaultConfiguration() {

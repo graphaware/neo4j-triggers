@@ -9,6 +9,8 @@ public class Definition {
 
     private String statement;
 
+    private String namedQuery;
+
     public Definition() {
     }
 
@@ -18,5 +20,13 @@ public class Definition {
 
     public String getStatement() {
         return statement;
+    }
+
+    public String getNamedQuery() {
+        return namedQuery;
+    }
+
+    public void setStatement(String statement) {
+        this.statement = statement;
     }
 }

@@ -86,6 +86,22 @@ public class TriggersIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    public void testLoadQueriesFromFile() {
+        clearDb();
+        initModuleWithConfig("integration/triggers-with-query-files.json", "integration/queries");
+        try (Transaction tx = database.beginTx()) {
+            database.execute("CREATE (n:Node)");
+            tx.success();
+        }
+
+        try (Transaction tx = database.beginTx()) {
+            Result result = database.execute("MATCH (n:Node:AutoUpdated) RETURN n");
+            assertTrue(result.hasNext());
+            tx.success();
+        }
+    }
+
+    @Test
     public void reloadTest() {
         clearDb();
         initModuleWithConfig("integration/triggers-multi.json");
