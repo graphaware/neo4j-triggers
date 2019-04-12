@@ -14,7 +14,7 @@ Download the following two `.jar` files and install them in the `plugins` direct
 * [Triggers Module](https://products.graphaware.com/?dir=triggers)
 
 Make sure to download the versions that are compatible with your Neo4j installation, for example the Triggers Module in
-version 3.5.1.53.1 is compatible with Neo4j 3.5.1 and the framework 3.5.1.53, the last bit specifies the version of the module
+version 3.5.4.53.1 is compatible with Neo4j 3.5.4 and the framework 3.5.4.53, the last bit specifies the version of the module
 itself.
 
 Next, add the following configuration in your `neo4j.conf` file to register the Triggers module:
@@ -135,12 +135,12 @@ com.graphaware.module.TR.queries=queries/
 
 The version number has two parts. The first four numbers indicate compatibility with Neo4j GraphAware Framework.
  The last number is the version of the Triggers library. For example, version 3.5.1.53.1 is version 1 of the Triggers library
- compatible with GraphAware Neo4j Framework 3.5.1.53.
+ compatible with GraphAware Neo4j Framework 3.5.4.53.
 
 License
 -------
 
-Copyright (c) 2018 GraphAware
+Copyright (c) 2019 GraphAware
 
 GraphAware is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
