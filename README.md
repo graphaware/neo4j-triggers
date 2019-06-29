@@ -3,6 +3,8 @@ GraphAware Neo4j Triggers
 
 EXPERIMENTAL MODULE
 
+[![Build Status](https://travis-ci.org/graphaware/neo4j-triggers.png)](https://travis-ci.org/graphaware/neo4j-triggers) | <a href="http://graphaware.com/products/" target="_blank">Products</a> | <a href="http://products.graphaware.com" target="_blank">Downloads</a> | <a href="http://graphaware.com/site/triggers/latest/apidocs/" target="_blank">Javadoc</a> | Latest Release: 3.5.5.53.0
+
 
 GraphAware Triggers is a simple library that automatically executes defined Cypher statements during Transaction Events.
 
@@ -140,7 +142,7 @@ The version number has two parts. The first four numbers indicate compatibility 
 License
 -------
 
-Copyright (c) 2019 GraphAware
+Copyright (c) 2013-2019 GraphAware
 
 GraphAware is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
