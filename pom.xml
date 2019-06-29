@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>triggers</artifactId>
-    <version>3.5.5.53.1-SNAPSHOT</version>
+    <version>3.5.5.53.1</version>
 
     <parent>
         <groupId>com.graphaware.neo4j</groupId>
@@ -36,7 +36,7 @@
         <connection>scm:git:git@github.com:graphaware/neo4j-triggers.git</connection>
         <developerConnection>scm:git:git@github.com:graphaware/neo4j-triggers.git</developerConnection>
         <url>git@github.com:graphaware/neo4j-triggers.git</url>
-        <tag>HEAD</tag>
+        <tag>triggers-3.5.5.53.1</tag>
     </scm>
 
     <developers>
