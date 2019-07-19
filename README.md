@@ -3,7 +3,7 @@ GraphAware Neo4j Triggers
 
 EXPERIMENTAL MODULE
 
-[![Build Status](https://travis-ci.org/graphaware/neo4j-triggers.png)](https://travis-ci.org/graphaware/neo4j-triggers) | <a href="http://graphaware.com/products/" target="_blank">Products</a> | <a href="http://products.graphaware.com" target="_blank">Downloads</a> | <a href="http://graphaware.com/site/triggers/latest/apidocs/" target="_blank">Javadoc</a> | Latest Release: 3.5.5.53.1
+[![Build Status](https://travis-ci.org/graphaware/neo4j-triggers.png)](https://travis-ci.org/graphaware/neo4j-triggers) | <a href="http://graphaware.com/products/" target="_blank">Products</a> | <a href="http://products.graphaware.com" target="_blank">Downloads</a> | <a href="http://graphaware.com/site/triggers/latest/apidocs/" target="_blank">Javadoc</a> | Latest Release: 3.5.6.54.1
 
 
 GraphAware Triggers is a simple library that automatically executes defined Cypher statements during Transaction Events.

@@ -19,12 +19,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>triggers</artifactId>
-    <version>3.5.5.53.2-SNAPSHOT</version>
+    <version>3.5.6.54.1-SNAPSHOT</version>
 
     <parent>
         <groupId>com.graphaware.neo4j</groupId>
         <artifactId>module-parent</artifactId>
-        <version>3.5.5.53</version>
+        <version>3.5.6.54</version>
         <relativePath />
     </parent>
 
