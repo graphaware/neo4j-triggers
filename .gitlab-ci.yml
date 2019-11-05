@@ -16,8 +16,7 @@ uploadArtifact:
   dependencies:
     - bumpVersion
   variables:
-    FROM: target/triggers-$PARENT_VERSION.jar
-    TO: $AWS_PATH/triggers-$PARENT_VERSION.jar
+    JAR_NAME: triggers
   only:
     refs:
       - master

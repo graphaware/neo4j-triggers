@@ -3,7 +3,7 @@ GraphAware Neo4j Triggers
 
 EXPERIMENTAL MODULE
 
-[![Build Status](https://travis-ci.org/graphaware/neo4j-triggers.png)](https://travis-ci.org/graphaware/neo4j-triggers) | <a href="http://graphaware.com/products/" target="_blank">Products</a> | <a href="http://products.graphaware.com" target="_blank">Downloads</a> | <a href="http://graphaware.com/site/triggers/latest/apidocs/" target="_blank">Javadoc</a> | Latest Release: 3.5.6.54.1
+[![Build Status](https://travis-ci.org/graphaware/neo4j-triggers.png)](https://travis-ci.org/graphaware/neo4j-triggers) | <a href="http://graphaware.com/products/" target="_blank">Products</a> | <a href="http://products.graphaware.com" target="_blank">Downloads</a> | <a href="http://graphaware.com/site/triggers/latest/apidocs/" target="_blank">Javadoc</a>
 
 
 GraphAware Triggers is a simple library that automatically executes defined Cypher statements during Transaction Events.
@@ -16,7 +16,7 @@ Download the following two `.jar` files and install them in the `plugins` direct
 * [Triggers Module](https://products.graphaware.com/?dir=triggers)
 
 Make sure to download the versions that are compatible with your Neo4j installation, for example the Triggers Module in
-version 3.5.4.53.1 is compatible with Neo4j 3.5.4 and the framework 3.5.4.53, the last bit specifies the version of the module
+version 3.2.4.53.1 is compatible with Neo4j 3.2.4 and the framework 3.2.4.53, the last bit specifies the version of the module
 itself.
 
 Next, add the following configuration in your `neo4j.conf` file to register the Triggers module:
